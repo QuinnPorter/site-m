@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meridian Analytica</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --color-bg: #F5F4F0;
+      --color-surface: #FFFFFF;
+      --color-dark: #1A1A1A;
+      --color-purple: #9B7FD4;
+      --color-purple-dark: #7B5EA7;
+      --color-purple-bg: #EDE9F7;
+      --color-amber: #D4A840;
+      --color-amber-light: #F5E6B8;
+      --color-text: #3A3A3A;
+      --color-text-muted: #888888;
+      --color-border: #E0DDD6;
+      --shadow-soft: 0 10px 30px rgba(24, 24, 24, 0.08);
+      --shadow-card: 0 18px 40px rgba(24, 24, 24, 0.09);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--color-bg);
+      color: var(--color-text);
+      font-family: "DM Sans", sans-serif;
+      line-height: 1.6;
+    }
+
+    img,
+    svg {
+      display: block;
+      max-width: 100%;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: min(1180px, 92%);
+      margin: 0 auto;
+    }
+
+    .section {
+      padding: 96px 0;
+    }
+
+    .section.fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+
+    .section.fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .stagger > * {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+
+    .visible .stagger > * {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .visible .stagger > *:nth-child(1) { transition-delay: 0ms; }
+    .visible .stagger > *:nth-child(2) { transition-delay: 100ms; }
+    .visible .stagger > *:nth-child(3) { transition-delay: 200ms; }
+    .visible .stagger > *:nth-child(4) { transition-delay: 300ms; }
+    .visible .stagger > *:nth-child(5) { transition-delay: 400ms; }
+
+    .brand-mark {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-logo {
+      width: 103.275px;
+      height: auto;
+      mix-blend-mode: multiply;
+    }
+
+    .brand-small .brand-logo {
+      width: 131px;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: transparent;
+      transition: background 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+      border-bottom: 1px solid transparent;
+    }
+
+    header.scrolled {
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(5px);
+      box-shadow: 0 8px 24px rgba(22, 22, 22, 0.05);
+      border-bottom-color: var(--color-border);
+    }
+
+    .nav-inner {
+      padding: 16px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-link {
+      position: relative;
+      padding: 9px 16px;
+      border-radius: 999px;
+      color: var(--color-dark);
+      font-size: 0.95rem;
+      transition: background 0.2s ease;
+    }
+
+    .nav-link::after {
+      content: "";
+      position: absolute;
+      left: 15%;
+      bottom: 6px;
+      width: 70%;
+      height: 2px;
+      background: var(--color-purple);
+      transform: scaleX(0);
+      transform-origin: center;
+      transition: transform 0.25s ease;
+    }
+
+    .nav-link:hover {
+      background: rgba(155, 127, 212, 0.08);
+    }
+
+    .nav-link.active::after,
+    .nav-link:hover::after {
+      transform: scaleX(1);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: none;
+      cursor: pointer;
+      border-radius: 999px;
+      font-family: inherit;
+      font-weight: 500;
+      transition: background 0.2s ease, transform 0.2s ease, color 0.2s ease;
+    }
+
+    .btn:focus-visible,
+    input:focus-visible,
+    textarea:focus-visible,
+    .icon-btn:focus-visible,
+    .mobile-toggle:focus-visible {
+      outline: 2px solid var(--color-purple);
+      outline-offset: 2px;
+    }
+
+    .btn-dark {
+      background: var(--color-dark);
+      color: #fff;
+      padding: 10px 18px;
+    }
+
+    .btn-dark:hover {
+      background: #2a2a2a;
+      transform: translateY(-1px);
+    }
+
+    .btn-amber {
+      background: var(--color-amber);
+      color: var(--color-dark);
+      padding: 12px 20px;
+      font-weight: 600;
+    }
+
+    .btn-amber:hover {
+      background: #bf932f;
+      transform: translateY(-1px);
+    }
+
+    .mobile-toggle {
+      display: none;
+      border: 1px solid var(--color-border);
+      background: var(--color-surface);
+      color: var(--color-dark);
+      padding: 8px 12px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 0.92rem;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding-top: 88px;
+      padding-bottom: 90px;
+    }
+
+    .gradient-blob {
+      position: absolute;
+      border-radius: 999px;
+      filter: blur(80px);
+      opacity: 0.15;
+      pointer-events: none;
+    }
+
+    .blob-purple {
+      width: 380px;
+      height: 320px;
+      background: var(--color-purple);
+      top: 40px;
+      right: 6%;
+    }
+
+    .blob-amber {
+      width: 320px;
+      height: 280px;
+      background: var(--color-amber);
+      left: 5%;
+      bottom: 30px;
+    }
+
+    .hero-grid {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      gap: 42px;
+      grid-template-columns: 1.1fr 0.9fr;
+      align-items: center;
+    }
+
+    .pill-row,
+    .pill-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+
+    .pill-amber-outline {
+      color: #7e6222;
+      border: 1px solid var(--color-amber);
+      background: rgba(245, 230, 184, 0.22);
+    }
+
+    .pill-dark {
+      color: #fff;
+      background: var(--color-dark);
+    }
+
+    h1, h2, h3 {
+      font-family: "Fraunces", serif;
+      color: var(--color-dark);
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 4.7vw, 3.85rem);
+      margin-bottom: 16px;
+      max-width: 700px;
+    }
+
+    .hero-copy p {
+      font-size: 1.08rem;
+      max-width: 620px;
+      color: var(--color-text);
+      margin-bottom: 30px;
+    }
+
+    .hero-art {
+      max-width: 858px;
+      margin-left: auto;
+    }
+
+    .hero-art img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 16px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.15);
+      transform: rotate(1.5deg);
+    }
+
+    .solution {
+      background: var(--color-purple-bg);
+    }
+
+    .section-head {
+      text-align: center;
+      max-width: 810px;
+      margin: 0 auto 26px;
+    }
+
+    h2 {
+      font-size: clamp(1.8rem, 3.4vw, 2.8rem);
+      margin-bottom: 16px;
+    }
+
+    .section-head p {
+      color: var(--color-text);
+      font-size: 1.05rem;
+    }
+
+    .divider {
+      border: 0;
+      border-top: 1px solid rgba(26, 26, 26, 0.24);
+      margin: 26px 0 34px;
+    }
+
+    .solution-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .solution-item {
+      padding: 12px 10px;
+      text-align: center;
+    }
+
+    .icon-btn {
+      width: 54px;
+      height: 54px;
+      border-radius: 999px;
+      background: #cfbdec;
+      border: 1px solid #bea2e4;
+      color: #4f3970;
+      margin: 0 auto 14px;
+      display: grid;
+      place-items: center;
+    }
+
+    .solution-item h3 {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+    }
+
+    .solution-item p {
+      color: var(--color-text);
+      font-size: 0.98rem;
+    }
+
+    .features-wrap {
+      display: grid;
+      gap: 36px;
+    }
+
+    .feature-row {
+      border-left: 2px solid transparent;
+      border-radius: 8px;
+      transition: border-color 0.2s ease;
+      padding: 8px 0 8px 14px;
+    }
+
+    .feature-row:hover {
+      border-left-color: var(--color-purple);
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      align-items: center;
+    }
+
+    .feature-copy .eyebrow {
+      font-size: 0.78rem;
+      color: var(--color-text-muted);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      font-weight: 500;
+    }
+
+    .feature-copy h3 {
+      font-size: clamp(1.5rem, 2.6vw, 2.05rem);
+      margin-bottom: 12px;
+    }
+
+    .feature-copy p {
+      color: var(--color-text);
+      margin-bottom: 16px;
+      max-width: 560px;
+    }
+
+    .feature-panel {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 20px;
+      padding: 22px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .device-frame {
+      background: var(--color-surface);
+      border-radius: 20px;
+      box-shadow: var(--shadow-soft);
+      padding: 12px;
+      overflow: hidden;
+    }
+
+    .device-frame img {
+      width: 133%;
+      max-width: 133%;
+      height: auto;
+      display: block;
+      border-radius: 12px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .stat-card {
+      background: #f7f5fc;
+      border: 1px solid #ddd1f1;
+      border-radius: 14px;
+      padding: 16px;
+    }
+
+    .stat-card.alt {
+      background: #efe7fd;
+    }
+
+    .stat-number {
+      color: var(--color-purple-dark);
+      font-size: 1.65rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .mini-pill {
+      border-radius: 999px;
+      background: #f2edf9;
+      border: 1px solid #ddcff3;
+      color: #614682;
+      padding: 7px 13px;
+      font-size: 0.86rem;
+    }
+
+    .timeline-list {
+      list-style: none;
+      display: grid;
+      gap: 10px;
+    }
+
+    .timeline-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      border: 1px solid var(--color-border);
+      border-radius: 12px;
+      padding: 10px 12px;
+    }
+
+    .status-pill {
+      border-radius: 999px;
+      padding: 4px 9px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: #1a1a1a;
+      min-width: 90px;
+      text-align: center;
+    }
+
+    .status-tech { background: #9de3ba; }
+    .status-real { background: #d9eb99; }
+    .status-energy { background: #f0c57d; }
+    .status-mining { background: #f3a275; }
+
+    .rank-list {
+      list-style: none;
+      display: grid;
+      gap: 14px;
+    }
+
+    .rank-item {
+      border: 1px solid var(--color-border);
+      border-radius: 12px;
+      padding: 10px 12px;
+    }
+
+    .rank-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 0.95rem;
+      margin-bottom: 8px;
+    }
+
+    .score {
+      color: var(--color-amber);
+      font-weight: 600;
+    }
+
+    .multi-bar {
+      width: 100%;
+      height: 8px;
+      border-radius: 999px;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 40% 33% 27%;
+    }
+
+    .multi-bar span:nth-child(1) { background: #79b885; }
+    .multi-bar span:nth-child(2) { background: #ddb255; }
+    .multi-bar span:nth-child(3) { background: #cf7462; }
+
+    .about h2 {
+      margin-bottom: 16px;
+    }
+
+    .about-intro {
+      max-width: 960px;
+      margin-bottom: 42px;
+      font-size: 1.04rem;
+    }
+
+    .team-title {
+      font-family: "DM Sans", sans-serif;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 500;
+      font-size: 0.88rem;
+      color: var(--color-dark);
+      margin-bottom: 8px;
+    }
+
+    .team-group-label {
+      font-size: 0.78rem;
+      color: var(--color-text-muted);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin: 18px 0 12px;
+      font-weight: 500;
+    }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .team-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 16px;
+      box-shadow: 0 10px 26px rgba(24, 24, 24, 0.08);
+      padding: 20px 18px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .team-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 32px rgba(24, 24, 24, 0.14);
+    }
+
+    .team-card h4 {
+      font-family: "Fraunces", serif;
+      font-size: 1.3rem;
+      color: var(--color-dark);
+      margin-bottom: 4px;
+    }
+
+    .team-role {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.11em;
+      color: var(--color-text-muted);
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .team-note {
+      font-size: 0.9rem;
+      font-style: italic;
+      color: #5a5a5a;
+    }
+
+    .demo {
+      background: var(--color-dark);
+      color: #ececec;
+      padding-bottom: 80px;
+    }
+
+    .demo h2 {
+      color: #fff;
+      text-align: center;
+    }
+
+    .demo-copy {
+      text-align: center;
+      max-width: 740px;
+      margin: 0 auto 24px;
+      color: #bfbfbf;
+    }
+
+    .demo-box {
+      max-width: 640px;
+      margin: 0 auto;
+      background: #222;
+      border: 1px solid #303030;
+      border-radius: 18px;
+      padding: 24px;
+    }
+
+    .input-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .field {
+      display: grid;
+      gap: 7px;
+    }
+
+    label {
+      font-size: 0.86rem;
+      color: #cbcbcb;
+    }
+
+    input,
+    textarea {
+      background: #161616;
+      border: 1px solid #3a3a3a;
+      border-radius: 10px;
+      color: #f6f6f6;
+      padding: 11px 12px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      transition: border-color 0.2s ease;
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .submit-wrap {
+      margin-top: 8px;
+      display: flex;
+      justify-content: flex-start;
+    }
+
+    .form-note {
+      margin-top: 12px;
+      font-size: 0.85rem;
+      color: #9a9a9a;
+      text-align: center;
+    }
+
+    footer {
+      background: var(--color-dark);
+      border-top: 1px solid rgba(212, 168, 64, 0.6);
+      padding: 16px 0 22px;
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      color: #cbcbcb;
+      font-size: 0.9rem;
+    }
+
+    .brand-small .brand-wordmark {
+      font-size: 0.72rem;
+      color: #efefef;
+    }
+
+    @media (max-width: 940px) {
+      .hero-grid,
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-art {
+        margin: 8px auto 0;
+      }
+
+      .feature-grid.reverse .feature-copy {
+        order: 1;
+      }
+
+      .feature-grid.reverse .feature-panel {
+        order: 2;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .section {
+        padding: 76px 0;
+      }
+
+      .nav-links {
+        position: absolute;
+        top: calc(100% + 8px);
+        right: 4%;
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: 16px;
+        box-shadow: var(--shadow-card);
+        padding: 10px;
+        display: none;
+        flex-direction: column;
+        align-items: stretch;
+        min-width: 200px;
+      }
+
+      .nav-links.open {
+        display: flex;
+      }
+
+      .mobile-toggle {
+        display: inline-flex;
+      }
+
+      .solution-grid,
+      .team-grid,
+      .stat-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header id="site-header" aria-label="Primary header">
+    <div class="container nav-inner">
+      <a href="#top" class="brand-mark" aria-label="Meridian Analytica home">
+        <img src="logo.png" alt="Meridian Analytica" class="brand-logo" />
+      </a>
+      <button type="button" class="mobile-toggle" aria-label="Toggle menu" id="mobile-toggle">Menu</button>
+      <nav aria-label="Main navigation">
+        <div class="nav-links" id="nav-links">
+          <a class="nav-link" href="#about">About</a>
+          <a class="btn btn-dark" href="#book-a-demo">Book a Demo</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero fade-in section">
+      <div class="gradient-blob blob-purple"></div>
+      <div class="gradient-blob blob-amber"></div>
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <h1>Personalized market intelligence to power smarter investment across Africa.</h1>
+          <p>Accelerating investment decisions across Africa through real-time, actionable analytics.</p>
+          <a href="#book-a-demo" class="btn btn-dark">Book a Demo &rarr;</a>
+        </div>
+        <div class="hero-art">
+          <img src="hero-screenshot.png" alt="Meridian Analytica platform" />
+        </div>
+      </div>
+    </section>
+
+    <section class="solution section fade-in">
+      <div class="container">
+        <div class="section-head">
+          <h2>The Solution</h2>
+          <p>Our product is investment data software leveraging Large Language Models to provide insights for equitable investment in Africa.</p>
+        </div>
+        <hr class="divider" />
+        <div class="solution-grid stagger">
+          <article class="solution-item">
+            <button class="icon-btn" aria-label="Geospatial Analytics icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M8 3H3V8M16 3H21V8M8 21H3V16M16 21H21V16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                <path d="M12 8V16M8 12H16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
+            </button>
+            <h3>Geospatial Analytics</h3>
+            <p>Provides clear, reliable analytics based on geospatial mapping and investment preferences.</p>
+          </article>
+          <article class="solution-item">
+            <button class="icon-btn" aria-label="Instant Insights icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <circle cx="5" cy="12" r="2" stroke="currentColor" stroke-width="1.7"/>
+                <circle cx="12" cy="6" r="2" stroke="currentColor" stroke-width="1.7"/>
+                <circle cx="19" cy="12" r="2" stroke="currentColor" stroke-width="1.7"/>
+                <circle cx="12" cy="18" r="2" stroke="currentColor" stroke-width="1.7"/>
+                <path d="M6.8 10.8L10.2 7.2M13.8 7.2L17.2 10.8M17.2 13.2L13.8 16.8M10.2 16.8L6.8 13.2" stroke="currentColor" stroke-width="1.5"/>
+              </svg>
+            </button>
+            <h3>Instant Insights</h3>
+            <p>Transforms live data into clear metrics that support faster, more confident business decisions.</p>
+          </article>
+          <article class="solution-item">
+            <button class="icon-btn" aria-label="Personalized Support icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M12 3L14.3 4.3L17 4L17.7 6.6L20 8L18.7 10.2L19.1 13L16.4 13.5L15 16L12.5 14.8L10 16L8.6 13.5L5.9 13L6.3 10.2L5 8L7.3 6.6L8 4L10.7 4.3L12 3Z" stroke="currentColor" stroke-width="1.5"/>
+                <circle cx="12" cy="10" r="2.5" stroke="currentColor" stroke-width="1.5"/>
+              </svg>
+            </button>
+            <h3>Personalized Support</h3>
+            <p>Personalizes analytics and high-quality data to your investment needs and scenario.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section fade-in">
+      <div class="container features-wrap stagger">
+        <article class="feature-row">
+          <div class="feature-grid">
+            <div class="feature-copy">
+              <p class="eyebrow">Coverage</p>
+              <h3>Geospatial</h3>
+              <p>Geospatial analytics to improve visibility into risk, investment friendliness, and the political climate.</p>
+              <div class="stat-grid">
+                <div class="stat-card">
+                  <p class="stat-number">54 countries</p>
+                  <p>Analytics for every country in Africa</p>
+                </div>
+                <div class="stat-card alt">
+                  <p class="stat-number">600+ Regions</p>
+                  <p>Subnational regions for every nation</p>
+                </div>
+              </div>
+            </div>
+            <div class="feature-panel" aria-label="Geospatial mockup panel">
+              <p class="eyebrow">Regional intelligence layer</p>
+              <div class="timeline-list">
+                <div class="timeline-item"><span>Risk Heatmaps</span><strong>Real-time</strong></div>
+                <div class="timeline-item"><span>Policy Volatility</span><strong>Updated weekly</strong></div>
+                <div class="timeline-item"><span>Infrastructure Readiness</span><strong>Scored by zone</strong></div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="feature-row">
+          <div class="feature-grid reverse">
+            <div class="device-frame" aria-label="Customization mockup panel">
+              <img src="dashboard-screenshot.png" alt="Customizable metrics dashboard" />
+            </div>
+            <div class="feature-copy">
+              <p class="eyebrow">Personalization</p>
+              <h3>Customizable Metrics</h3>
+              <p>Our questions change based on your responses and profile, allowing us to understand your needs and personalize our metrics. We provide regional and scenario-specific insights backed by reliable hard data from the world's most respected institutions.</p>
+              <div class="badge-row">
+                <span class="mini-pill">Personalized - Tailored algorithm-based data</span>
+                <span class="mini-pill">Comparative - Compare across regions and scenarios</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="feature-row">
+          <div class="feature-grid">
+            <div class="feature-copy">
+              <p class="eyebrow">Sector intelligence</p>
+              <h3>Industry-Specific Insights</h3>
+              <p>Approval timelines, governance scores, and sector-specific data - all tailored to your industry.</p>
+            </div>
+            <div class="device-frame" aria-label="Industry signals panel">
+              <img src="dashboard-screenshot.2.png" alt="Industry-specific dashboard" />
+            </div>
+          </div>
+        </article>
+
+        <article class="feature-row">
+          <div class="feature-grid reverse">
+            <div class="device-frame" aria-label="Country and subnational ranking panel">
+              <img src="subnational-screenshot.png" alt="Subnational regional breakdown" />
+            </div>
+            <div class="feature-copy">
+              <p class="eyebrow">Granularity</p>
+              <h3>Country &amp; Subnational Breakdowns</h3>
+              <p>Regions ranked by your investor profile, with score bars across multiple dimensions.</p>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="about section fade-in" id="about">
+      <div class="container">
+        <h2>About Meridian Analytica</h2>
+        <p class="about-intro">Meridian Analytica is an investment intelligence platform built to support equitable investment in Africa. We aggregate geospatial data, economic indicators, and governance metrics across all 54 African nations and 600+ subnational regions - delivering personalized, actionable insights to investors, advisors, and institutions operating on the continent.</p>
+
+        <p class="team-title">Our Team</p>
+        <hr class="divider" />
+
+        <div class="stagger">
+          <p class="team-group-label">Managing Partners</p>
+          <div class="team-grid">
+            <article class="team-card">
+              <h4>Ari Bersch</h4>
+              <p class="team-role">Managing Partner</p>
+            </article>
+            <article class="team-card">
+              <h4>Quinn Porter</h4>
+              <p class="team-role">Managing Partner</p>
+            </article>
+          </div>
+
+          <p class="team-group-label">Senior Advisors</p>
+          <div class="team-grid">
+            <article class="team-card">
+              <h4>Harry Burns</h4>
+              <p class="team-role">Senior Advisor</p>
+              <p class="team-note">Vice-Chair of Westminster Africa Business Group</p>
+            </article>
+            <article class="team-card">
+              <h4>Osama Saleh</h4>
+              <p class="team-role">Senior Advisor</p>
+              <p class="team-note">Former Minister of Investment of Egypt</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="demo section fade-in" id="book-a-demo">
+      <div class="container">
+        <h2>Book a Demo</h2>
+        <p class="demo-copy">See Meridian Analytica in action. Get a personalized walkthrough of our platform tailored to your investment focus and target markets.</p>
+        <div class="demo-box">
+          <div class="input-grid" aria-label="Book demo inputs">
+            <div class="field">
+              <label for="name">Name</label>
+              <input id="name" type="text" autocomplete="name" />
+            </div>
+            <div class="field">
+              <label for="email">Email</label>
+              <input id="email" type="email" autocomplete="email" />
+            </div>
+            <div class="field">
+              <label for="company">Company</label>
+              <input id="company" type="text" autocomplete="organization" />
+            </div>
+            <div class="field">
+              <label for="message">Message</label>
+              <textarea id="message" aria-label="Tell us about your investment focus" placeholder="Tell us about your investment focus"></textarea>
+            </div>
+            <div class="submit-wrap">
+              <button class="btn btn-amber" id="submit-demo" type="button">Request Demo &rarr;</button>
+            </div>
+          </div>
+          <p class="form-note">We typically respond within 24 hours.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <div class="brand-mark brand-small"></div>
+      <p>&copy; 2025 Meridian Analytica. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    const header = document.getElementById("site-header");
+    const sections = document.querySelectorAll(".fade-in");
+    const navLinks = document.querySelectorAll(".nav-link");
+    const navMenu = document.getElementById("nav-links");
+    const mobileToggle = document.getElementById("mobile-toggle");
+
+    const updateHeaderOnScroll = () => {
+      if (window.scrollY > 50) {
+        header.classList.add("scrolled");
+      } else {
+        header.classList.remove("scrolled");
+      }
+    };
+
+    const sectionObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+
+    sections.forEach((section) => sectionObserver.observe(section));
+
+    const targetSections = ["about", "book-a-demo"].map((id) => document.getElementById(id));
+    const navObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            navLinks.forEach((link) => {
+              link.classList.toggle("active", link.getAttribute("href") === `#${entry.target.id}`);
+            });
+          }
+        });
+      },
+      { threshold: 0.45 }
+    );
+
+    targetSections.forEach((section) => {
+      if (section) navObserver.observe(section);
+    });
+
+    document.querySelectorAll('a[href^="#"]').forEach((link) => {
+      link.addEventListener("click", (event) => {
+        const href = link.getAttribute("href");
+        if (!href || href === "#") return;
+        const target = document.querySelector(href);
+        if (!target) return;
+        event.preventDefault();
+        target.scrollIntoView({ behavior: "smooth", block: "start" });
+        navMenu.classList.remove("open");
+      });
+    });
+
+    mobileToggle.addEventListener("click", () => {
+      navMenu.classList.toggle("open");
+    });
+
+    document.getElementById("submit-demo").addEventListener("click", () => {
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      if (!name || !email) {
+        alert("Please add at least your name and email.");
+        return;
+      }
+      alert("Thanks - your demo request has been captured. Our team will respond within 24 hours.");
+    });
+
+    window.addEventListener("scroll", updateHeaderOnScroll, { passive: true });
+    updateHeaderOnScroll();
+  </script>
+</body>
+</html>
